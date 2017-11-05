@@ -79,10 +79,6 @@ header a {
   /*display: none;*/
 }
 
-.context {
-  margin-top: 40px;
-}
-
 .border {
   border: 1px solid;
   margin: 10px;
@@ -101,39 +97,25 @@ header a {
   border-bottom: 1px solid;
 }
 
-#theorem1 {
-  padding-top: 50px;
+#section1 {
+  /*padding-top: 50px;*/
   /*margin-top: 200px;
   color: blue;*/
 }
 
-#theorem2 {
-  /*padding-top: 25px;
-  margin-top: 200px;
-  color: blue;*/
-}
 
-#theorem3 {
-  /*padding-top: 25px;
-  margin-top: 200px;
-  color: blue;*/
-}
-
-#click,#click2,#click3,#click4 {
+/*#click,#click2,#click3,#click4 {
   width: 45px;
 }
 
 #hide,#hide3,#hide4 {
   display: none;
-}
+}*/
 
-.graph1 {
-  margin: 10px 100px;
-  width: 70%;
-}
+/*
 
 .graph2 {
-  /*float: left;*/
+  float: left;
   height: 150px;
   width: 40%;
   padding: 10px;
@@ -145,8 +127,4 @@ header a {
   height: 200px;
 }
 
-.graph4 {
-  height: 100px;
-  width: 50%;
-  padding:10px;
-}
+*/
