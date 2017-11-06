@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>A COURSE IN LARGE SAMPLE THEORY</title>
     <link href="main.css" rel="stylesheet">
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="main.js"></script>
-    <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-  </head>
+    <!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>-->
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>  </head>
   <body>
     <!--<header>
       <a href="1page.html#thema">前ページ</a>
@@ -24,81 +25,421 @@
 
       <div class="abstract border">
         <h2 id="abs">概要</h2>
-        <ol>
-          <li>introduction</li>
-          <p class="indent">定理の紹介と証明</p>
-          <p>1. Forward Stepwise Regression</p>
-          <p class="indent">i.i.dな確率ベクトルについての中心極限定理</p>
-          <p>2. The Lasso</p>
-          <p class="indent">独立だが同分布でない確率変数についての中心極限定理</p>
-          <li>3. Fitting Lasso Models</li>
-          <p class="indent">推定量,統計量が漸近正規性を持つことを示す。</p>
-          <li>4. Least-Angle Regression</li>
-          <p>中心極限定理の収束が一様でない</p>
-          <p>4.1 Lasso and Degrees of Freedom</p>
-          <li>5. Fitting Generalized Lasso Models</li>
-          <p class="indent">近似精度の改善</p>
-          <li>6. Post-Selection Inference for the Lasso</li>
-          <p>ああ</p>
-          <li>7. Connections and Extensions</li>
-          <p>a</p>
-          <p>7.1 Lasso Logistic Regression and the SVM</p>
-          <p>7.2 Lasso and Boosting</p>
-          <p>7.3 Extensions of the Lasso</p>
-        </ol>
+        <p>0. Introduction</p>
+        <p class="indent">この章の内容</p>
+        <p>1. Forward Stepwise Regression</p>
+        <p class="indent">変数選択のアルゴリズム</p>
+        <p>2. The Lasso</p>
+        <p class="indent">Lassoの説明</p>
+        <p>3. Fitting Lasso Models</p>
+        <p class="indent">Lassoモデルの解き方</p>
+        <p>4. Least-Angle Regression</p>
+        <p class="indent">e</p>
+        <p class="indent">4.1 Lasso and Degrees of Freedom</p>
+        <p>5. Fitting Generalized Lasso Models</p>
+        <p class="indent">f</p>
+        <p>6. Post-Selection Inference for the Lasso</p>
+        <p class="indent">g</p>
+        <p>7. Connections and Extensions</p>
+        <p class="indent">h</p>
+        <p class="indent">7.1 Lasso Logistic Regression and the SVM</p>
+        <p class="indent">7.2 Lasso and Boosting</p>
+        <p class=indent>7.3 Extensions of the Lasso</p>
       </div>
 
       <div class="contexts">
-        <h2 id="intro">introduction</h2>
-        <p></p>
+        <h2 id="intro">0. Introduction</h2>
+        <p>この章ではwide data setsを対象とする。</p>
+        <div class="border">
+          <p>\(\underline{wide\ data}\)</p>
+          <p>変数の数がサンプル数をはるかに超えるデータのこと。</p>
+        </div>
+
+        <p>例</p>
+        <p>辞書のやつ</p>
+        <p>\(\Downarrow\)</p>
+        <p>数百の説明変数を回帰や分類に使うなら、全ての説明変数は使いたくない。</p>
+        <p>なぜなら、冗長な変数を用いると性能下がる。</p>
+        <p>\(\Downarrow\)</p>
+        <p>そこで良いサブセットの選択(=変数選択)の手法について興味がある。</p>
+        <p>この章では</p>
+        <p>1. 変数選択(特にforward-stepwiseアプローチについて)</p>
+        <p>2. Lasso</p>
+        <p>3. LARsアルゴリズム(2つのアプローチを結ぶ,solution-pathを与える)</p>
+        <p>4. big dataとwide dataへの他のアプローチ</p>
+        <p>の大きく分けて4つについて説明する。</p>
 
       </div>
 
       <div class="contexts">
         <h2 id="section1">1. Forward Stepwise Regression</h2>
-        <p></p>
+        <p>??stepwise法は長い歴史があり、元々はデータセットのサイズが</p>
+        <p>非常に控えめなとき、特に変数の数に関して条件で考案された。</p>
+        <p>stepwise法は最良サブセット(best-subset)選択より</p>
+        <p>性能が落ちる代わりに、計算コストは低いものとして考えられた。</p>
+
+        <h3>1.1 best subset regression</h3>
+        <p>仮定</p>
+        <p>サンプル数 : n</p>
+        <p>応答 : \(y_i(i=1,\cdots,n)\)</p>
+        <p>説明変数 : \(x_i^{'}=(x_{i1},\cdots,x_{ip})\)</p>
+        <p>??この章で扱うモデル : 線形回帰モデルorロジスティック回帰モデル</p>
+        <p>??損失関数 : L(二乗和or対数尤度)</p>
 
         <div class="border">
-          <p>\(\underline{ベリー・エシーンの定理}\)</p>
+          <p>\(\underline{アルゴリズム16.1 best\ subset\ regression}\)</p>
+          <ol>
+            <p>ステップ1</p>
+            <p class="indent">m=0から始める。</p>
+            <p class="indent">\(\hat{\eta_{0}}(\bf{x}) = \hat{\beta_{0}}とおく。\)</p>
+            <p class="indent">\(\hat{\beta_{0}}\)は応答yの平均である。</p>
+            <li>ステップ2</li>
+            <p>m=1では、</p>
+            <p>応答yに最もfitする1つの変数\(x_j\)を求める。</p>
+            <p>つまり、\(\hat{\eta}_{1}(\bf{x}) = \hat{\beta}_0 + x_j \hat{\beta}_j\)とおいたとき、</p>
+            <p>損失関数Lが最小となる説明変数\(x_j\)を求める。</p>
+            <p>そして、\(A_1 = \{j\}\)とする。 </p>
+            <li>ステップ3</li>
+            <p>各サブセットサイズ\(m\in \{2,3,\cdots,M\}\)で最適なサブセット\(A_m\)を求める。</p>
+            <p>ただし、\(M \leq \min(n-1, p)\)である。</p>
+            <li>ステップ4</li>
+            <p>これらのM個のサブセットからベストなサブセットを決める。</p>
+          </ol>
         </div>
+
+        <p>ステップ4で最適なサブセットを選択するためにいくつかの手法がある。</p>
+        <p>ここでは、K-fold cross-validationを紹介する。</p>
+        <div class="border">
+          <p>\(\underline{K-fold cross-validation}\)</p>
+          <p>そもそもCVは</p>
+          <p>データを訓練用とテスト用に分けて性能を検証する方法。</p>
+          <p>K-fold法では、</p>
+          <p>データをK個にサンプルサイズが等しくなるようにランダムに分ける。</p>
+          <p>そしてK-1のデータを訓練データとし、残り1つを<テストデータとして用いる。</p>
+          <p>これをK通りすべてで試す。</p>
+          <p>そして、各サブセットサイズmでのK回の性能の平均を取る。</p>
+          <p>最良の性能を誇るサブセット\(A_m'\)を選ぶ。</p>
+        </div>
+        <p>ただし、最適なサブセット\(A_m'\)はK回の実験で異なるサブセットを</p>
+        <p>選んでいる可能性がある。</p>
+        <p>そこで、求まった最適なサブセットサイズ\(m'\)で、</p>
+        <p>全てのサンプルを用いてもう一度変数選択する。</p>
+
+        <p>ただし、このbest subset regressionには問題がある。<\p>
+        <p>それはステップ3での計算コストが大きいことである。</p>
+        <p>\(\Downarrow\)</p>
+        <p>その問題解決のためにstepwise法が提案された。</p>
+
+        <h3>1.2 forward stepwise regression</h3>
+        <div class="border">
+          <p>\(\underline{アルゴリズム16.2 forward stepeise regression}\)</p>
+          <p>ステップ1</p>
+          <p class="indent">m=0から始める。</p>
+          <p class="indent">\(\hat{\eta_{0}}(\bf{x}) = \hat{\beta_{0}}とおく。\)</p>
+          <p class="indent">\(\hat{\beta_{0}}\)は応答yの平均である。</p>
+          <p>ステップ2</p>
+          <p>m=1では、</p>
+          <p>応答yに最もfitする1つの変数\(x_j\)を求める。</p>
+          <p>つまり、\(\hat{\eta}_{1}(\bf{x}) = \hat{\beta}_0 + x_j \hat{\beta}_j\)とおいたとき、</p>
+          <p>損失関数Lが最小となる説明変数\(x_j\)を求める。</p>
+          <p>そして、\(A_1 = \{j\}\)とする。 </p>
+          <p><font color="red">ステップ3(ここだけ変わる)</font></p>
+          <p>各サブセットサイズ\(m\in \{2,3,\cdots,M\}で最適なサブセット\(A_m\)を求める。</p>
+          <p>ただし、\(M \leq \min(n-1, p)\)である。</p>
+          <p>そして、サブセット\(A_1,\cdots,A_M\)はnestする。</p>
+          <p>ステップ4</p>
+          <p>これらのM個のサブセットからベストなサブセットを決める。</p>
+        </div>
+
+        <p>サブセットがnestしているとは</p>
+        <p>\(A_1 \subset A_2 \subset \cdots \subset A_M\)が成り立つことを示す。</p>
+        <p>これより、サブセットの大きさが1つ大きくなるたびに1つだけ変数を選択すれば良いことになる。</p>
+
+        <p>例として、spamデータでforward stepwise regressionを行う。</p>
+        <p>ここでは、</p>
+        <p>説明変数 : 57の単語</p>
+        <p>訓練データ数 : 3065</p>
+        <p>testデータ : 1536</p>
+        <p>応答 : +1(スパム) or -1(notスパム)</p>
+        <p>詳細は表8.3, 図8.7, 図12.2</p>
+
+        <div align="center">
+          <figure id="fig1">
+            <img src="fig1.png" width="300" height="200">
+            <figcaption>図16.1</figcaption>
+          </figure>
+        </div>
+
+        <p>ここで横軸の\(R^2\)は決定係数(=寄与率)であり、</p>
+        <p>説明変数が被説明変数をどのくらい説明できているかを表す値である。</p>
+        <p>そして縦軸は係数(\(\beta_0, \cdots, \beta_p\))の大きさを表す。</p>
+        <p>また灰色の線は各ステップを表す。</p>
+        <p>nestしてるので、1度非0になった係数はずっと非0である。</p>
+
+        <p>p318の一番下から飛ばしてる</p>
+        <p>solution pathの説明とactive setの説明</p>
 
       </div>
 
       <div class="contexts">
         <h2 id="section2">2. The Lasso</h2>
-        <p></p>
+        <p>??stepwise法による変数選択法は適度な数の変数が役割を果たす場合、扱いにくくなる。</p>
+        <p>またforward stepwise法は貪欲法である。</p>
+        <p>貪欲法とは</p>
+        <p>問題の要素を複数の部分問題に分割し、それぞれを独立に評価を行い、</p>
+        <p>評価値の高い順に取り込んでいくことで解を得るという方法のことである。</p>
+        <p>この手法で得られるかいは最適解である保証はない。</p>
+        <p>\Downarrow</p>
+        <p>そこでLasso登場。</p>
+        <p>より原理的な手段。さらに凸最適化問題を解く。</p>
+        <div class="border">
+          <p>\(\underline{二乗誤差損失のlasso回帰}\)</p>
+          <p>\(\min_{\beta_0\leq\mathbb{R}, \bf{\beta}\leq\mathbb{R}^{p}}
+            \frac{1}{n}\sum_{i=1}^{n}(y_i - \beta_0 - \beta^{T}\bf{x}_i\rm{)^2}
+            subject\ to\ ||\beta||_1 \leq t\)
+          </p>
+          <p>ここで、\(||\beta||_1\)はl1ノルムである。</p>
+          <p>よって、損失関数も制約条件も\(\beta\)について凸であるので、</p>
+          <p>この問題は凸最適化問題である。</p>
+          <p>凸であるとは、</p>
+          <p>極小値が存在するなら、それは大域的最小値である。</p>
+        </div>
+
+        <p>この制約部分は、係数\(\beta\)が0になることを強いる。</p>
+        <p>また、過学習を防ぐ。</p>
+
+        <p>このLasso回帰の親戚にRidge回帰というものがある。</p>
+
+        <div class="border">
+          <p>\(\underline{二乗誤差損失のRidge回帰}\)</p>
+          <p>\(\min_{\beta_0\leq\mathbb{R}, \bf{\beta}\leq\mathbb{R}^{p}}
+            \frac{1}{n}\sum_{i=1}^{n}(y_i - \beta_0 - \beta^{T}\bf{x}_i\rm{)^2}
+            subject\ to\ ||\beta||_2 \leq t\)
+          </p>これを解く。
+          <p>ここでは制約条件だけが変わった。</p>
+        </div>
+
+        <p>Lasso回帰もRidge回帰もパラメータ縮小推定法である。</p>
+        <p>縮小推定法とは、</p>
+        <p>推定に関係ない説明変数に対応するパラメータの影響を縮小する。</p>
+        <p>ただ大きな違いがあり、それはLassoでは係数\(\beta\)の多くが0となるが、</p>
+        <p>Ridge回帰では全ての係数が非0となることだ。</p>
+        <p>\(\Downarrow\)</p>
+        <p>これより、Lasso回帰は縮小推定の手法でもあり、変数選択の手法でもある。</p>
+        <p>しかし、Ridge回帰はただの縮小推定の手法である。</p>
+
+        <p>図16.4では上のことを表す図となっている。</p>
+        <div align="center">
+          <figure id="fig4">
+            <img src="fig4.png" width="300" height="200">
+            <figcaption>図16.4</figcaption>
+          </figure>
+        </div>
+
+        <p>また、Lassoでは全ての変数を同じ単位で扱う。</p>
+        <p>よって各変数に対して標準化を行う必要がある。</p>
+
+        <p>次に図16.5では</p>
+        <p>spamデータを用いたLasso回帰のregularization pathである。</p>
+        <div align="center">
+          <figure id="fig5">
+            <img src="fig5.png" width="300" height="200">
+            <figcaption>図16.5</figcaption>
+          </figure>
+        </div>
+        <p>図の上の数字が制約条件のtを表す。</p>
+        <p>横軸は決定係数、縦軸は係数\(\beta\)の大きさを表す。</p>
+        <p>灰色の縦線は係数が非0となった瞬間を表す。</p>
+        <p>図16.1と比較してわかるように、forward stepwise法より、</p>
+        <p>滑らかに係数が変化する。</p>
+        <p>16.4節で詳しく説明するが、係数\(\beta\)は制約条件のtに対して、</p>
+        <p>区分線形であるので、このpathを正確にかける。</p>
+
+        <p>図16.6では、</p>
+        <p>forward stepwise法とLasso回帰の性能比較を表した図である。</p>
+        <div align="center">
+          <figure id="fig6">
+            <img src="fig6.png" width="300" height="200">
+            <figcaption>図16.6</figcaption>
+          </figure>
+        </div>
+
+        <p>またspamデータ使う。</p>
+        <p>その結果、forward stepwise法とLasso回帰はほぼ同じ性能を発揮するが、</p>
+        <p>?Lassoの方が縮小推定の性質のために時間がかかる。</p>
+
+        <p>ここで、ロジスティック回帰の目的関数を下に示す。</p>
+
+        <div class="border">
+          <p>\(\underline{Lassoロジスティック回帰(or尤度ベースの線形モデル)}\)</p>
+          <p>罰則付き最尤法を用いて</p>
+          <p>\(\min_{\beta_0\leq\mathbb{R}, \bf{\beta}\leq\mathbb{R}^{p}}
+            \frac{1}{n}\sum_{i=1}^{n} L(y_i, \beta_0 + \beta^{T}\bf{x}_i\rm{)^2}
+            subject\ to\ ||\beta||_2 \leq t\)
+          </p>
+          <p>で表される。</p>
+          <p>ここでLは負の対数尤度関数である。</p>
+        </div>
 
       </div>
 
       <div class="contexts">
         <h2 id="section3">3. Fitting Lasso Models</h2>
+        <p>上のLassoモデルの目的関数を解く。</p>
+        <p>目的関数(16.1),(16.2)は微分可能でβについて凸で、制約もβについて凸である。</p>
+        <p>式(16.1)をラグランジュ形式で書き直すと、</p>
+        <div align="center">
+          <p>\(\min_{\beta \in \mathbb{R}^{p}} \frac{1}{2n}
+            ||\bf{y} - \bf{X}\bf||^2 + \lambda||\beta||_1\ \ \ (16.3)\)
+          </p>
+        </div>
+        <p>となる。</p>
+        <p>yとXは標準化で平均0より切片はなくした。</p>
+        <p>ここでの解は\(t=||β||_1\)に相当する。</p>
+        <p>\(\lambda\)が大きいことはtが小さいことに相当する。</p>
+        <p>λ=0は制約条件なしの最小二乗法となる。</p>
+        <p>式(16.3)を微分すると、</p>
+        <div align="center">
+          <p>\( -\frac{1}{n}<\bf{x}_j, \bf{y}-\bf{X}\hat{\beta}\rm{>}
+            + \lambda s_j = 0,\ (j=1,\cdots,p)\ \ \ (16.4)\)
+          </p>
+        </div>
+        <p>を満たす\(\beta\)が解となる。</p>
+        <p>ここで、\(s_j\)は、</p>
+        <p>\(\hat{\beta}_j \not= 0\)なら、\(s_j = \pm 1\)で、</p>
+        <p>\(\hat{\beta}_j = 0\)なら、\(s_j \in [-1,1]\)である。</p>
+        <p>また、\(<,>\)は内積を表す。</p>
+        <p>以上から、Lassoの解の性質がわかる。</p>
+
+        <div class="border">
+          <p>\(\underline{Lassoの解βの性質}\)</p>
+          <p>1. active setの説明変数(対応する係数が非0)ついて以下が成り立つ。</p>
+          <p>\( \frac{1}{n}|<\bf{x}_j, \bf{y} - \bf{X}\hat{\beta}| = \lambda \)</p>
+          <p></p>
+          <p>2. active setに含まれない説明変数(対応する係数が0)について以下が成り立つ。</p>
+          <p>\( \frac{1}{n}|<\bf{x}_j, \bf{y} - \bf{X}\hat{\beta}| \leq \lambda \)</p>
+          <p>つまり係数が0である。</p>
+        </div>
+        <p>これらの性質は計算コストに大きな影響を与える。</p>
+        <p>\(\Downarrow\)</p>
+        <p>ある\(\lambda\)に対して、\(\hat{\beta}(\lambda_1)\)が決まったとして、</p>
+        <p>\(\lambda_1\)より少し小さい\(\lambda_2\)を考える。</p>
+        <p>\([\lambda_2,\lambda_1]\)の範囲で、active setが変わらないなら</p>
+        <p>係数\(\hat{\beta}(\lambda)\)は\([\lambda_2, \lambda_1]\)の区間で線形である。</p>
+        <p>active setをAとすると</p>
+        <div align="center">
+          <p>\(\bf{X}_A^{T}(\bf{y} - \bf{X}\hat{\beta}(\lambda_1)) = ns_A \lambda_1\)</p>
+          <p>\(\bf{X}_A^{T}(\bf{y} - \bf{X}\hat{\beta}(\lambda_2)) = ns_A \lambda_2\)</p>
+        </div>
+        <p>が成り立つ。</p>
+        <p>これを用いると、</p>
+        <div align="center">
+          <p>\(\bf{X}_{A}^{T}X(\hat{\beta}(\lambda_2) - \hat{\beta}(\lambda_1))
+            = n(\lambda_1 - \lambda_2)\bf{s_A}\)
+          </p>
+        </div>
+        <p>また、アクティブセットに含まれない説明変数に対応する係数\(\beta\)は0であるので、</p>
+        <div align="center">
+          <p>\((\hat{\beta}_A (\lambda_2) - \hat{\beta}_A (\lambda_1))
+            = n(\lambda_1 - \lambda_2)(\bf{X}_A^{T} X_{A})^{-1}\bf{s_A}\ \ \ (16.5)\)
+          </p>
+        </div>が得られる。
+        <p>以上より、Lasso回帰の係数\(\beta\)は\(\lambda\)に対して連続で区分線形である。</p>
+        <p>ただし、active setが変わるときや係数の符号が変わるときは結び目ができる。</p>
+
+        <p>また、もう一つの結果として</p>
+        <p>\(\hat{\beta}(\lambda_{max})=0\)を満たす\(\lambda\)の最小値\(\lambda_{max}\)</p>
+        <p>を簡単に決定できる。</p>
+        <p>式(16.4)を用いて、</p>
+        <p>\(\lambda_{max} = \max_{j} \frac{1}{n}|<\bf{x}_j, \bf{y}>|\)</p>
+        <p>と求まる。</p>
         <p></p>
+
+        <p>これらの2つの事実とプラスαが二乗誤差損失のLassoの正確なsolution path</p>
+        <p>を求めることを可能にする。</p>
+        <p>これは次の節で説明する。</p>
 
       </div>
 
       <div class="contexts">
         <h2 id="section4">4. Least-Angle Regression</h2>
-        <p></p>
+        <p>Lasso回帰の係数が区分線形であることがわかった。</p>
+        <!--<p>線形回帰の解を疎に求めるアルゴリズムとして2004年に提案されました</p>-->
+
+        <div class="border">
+          <p>\(\underline{アルゴリズム16.3 Least Angle Regression}\)</p>
+          <p>ステップ1</p>
+          <p></p>
+          <p>ステップ2</p>
+          <p></p>
+          <p>ステップ3</p>
+          <p></p>
+          <p>(a)</p>
+          <p>(b)</p>
+          <p>(c)</p>
+          <p>(d)</p>
+          <p>ステップ4</p>
+        </div>
+
+        <p>説明</p>
 
         <h3 id="subsection41">4.1 Lasso and Degrees of Freedom</h3>
+        <p>図16.8</p>
+        <p>図16.8の左の図を見ると、forward stepwise回帰はLasso回帰より</p>
+        <p>早くMSEを小さくする。</p>
+        <p>12章のdfの共分散式を用いて、各ステップでfitting度合いを数値化する。</p>
+        <p>df(degree of freedoms)</p>
+        <p>式(16.6)</p>
+        <p>LARでは各ステップで１つdfが増える。</p>
+        <p>forward-stepwiseではより早い段階でより多くのdfが増える。</p>
 
       </div>
 
       <div class="contexts">
         <h2 id="section5">5. Fitting Generalized Lasso Models</h2>
-        <p></p>
+        <p>今までは、二乗誤差損失のLassoにだけ焦点を当て、</p>
+        <p>係数の区分線形性を効率的なパスの推定に利用してきた。</p>
+        <p>しかし、二乗誤差損失以外の損失関数ではこの区分線型性は生じない。</p>
+        <p>よって潜在的に係数パスの取得にコストがかかる。</p>
+
+        <p>ここではロジスティック回帰による2値分類問題を例として考える。</p>
+        <p>目的関数は以下のようにかける。</p>
+        <p>式(16.7)</p>
+
+        <p>非線型性</p>
+
+        <p>効率的な手法2つ</p>
+
+        <div class="border">
+          <p>\(\underline{path-wise coordinate descent}\)</p>
+          <p>1.</p>
+          <p>2.</p>
+          <p>3. </p>
+        </div>
+
+        <div class="border">
+          <p>\(\underline{proximal-Newton strategy}\)</p>
+          <p>1.</p>
+          <p>2.</p>
+        </div>
+
+        <p>詳細</p>
+
+        <p>図16.9</p>
+        <p>Lassoとforward stepwise ロジスティック回帰をspamデータで比較する。</p>
 
       </div>
 
       <div class="contexts">
         <h2 id="section6">6. Post-Selection Inference for the Lasso</h2>
-        <p></p>
+        <p>この節では、推論には注意を向けず予測のための解釈可能なモデルの構築について</p>
+        <p>確かに推論は適応的に選択されたモデルにとっては困難である。</p>
 
       </div>
 
       <div class="contexts bottom">
         <h2 id="section7">7. Connections and Extensions</h2>
-        <p></p>
+        <p>Lassoモデルと他の有名な予測問題の手法との繋がりについて。</p>
 
         <h3 id="subsection71">7.1 Lasso Logistic Regression and the SVM</h3>
 
@@ -110,20 +451,12 @@
 
     </div>
 
-    <!-- <div class="container markdown-left">
-      <a href="index.html#thema"><p>前ページ</p></a>
-      <a href="#abs"><p>概要</p></a>
-      <a href="#theorem1">1. 中心極限定理</a>
-      <a href="#jump1-1"><p>1.1 定理5</p></a>
-      <a href="#jump1-2"><p>1.2 リンドバーグ・フェラーの定理</p></a>
-      <a href="#theorem2"><p>2. 例</p></a>
-      <a href="#exm1"<p>2.1 例5.1</p></a>
-      <a href="#exm2"><p>2.2 例5.2</p></a>
-      <a href="#exm3"><p>2.3 例5.3</p></a>
-      <a href="#theorem3"><p>3. 近似の改善</p></a>
-      <a href="#jump3-1"><p>3.1 ベリー・エシーンの定理</p></a>
-      <a href="#jump3-2"><p>3.2 エッジワース展開</p></a>
-    </div>-->
+    <div class="container markdown-left">
+      <p>線形回帰モデル</p>
+      <p class="small">\(y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} \)</p>
+      <p>サンプル : \(i=1,\cdots,n\)</p>
+      <p>説明変数 : \(x_{i1},\cdots,x_{ip}\)</p>
+    </div>
     <script type="text/javascript" src=“main.js”></script>
   </body>
 </html>
