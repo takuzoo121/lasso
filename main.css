@@ -79,6 +79,14 @@ header a {
   /*display: none;*/
 }
 
+.contexts p {
+  padding-left: 10px;
+}
+
+.contexts .indent{
+  padding-left: 20px;
+}
+
 .border {
   border: 1px solid;
   margin: 10px;
@@ -91,6 +99,10 @@ header a {
 
 .border li {
   margin: 10px;
+}
+
+.border .indent {
+  padding-left: 20px;
 }
 
 .underbar {
