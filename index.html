@@ -21,7 +21,8 @@
       <a href="#theorem3">3.近似の改善</a>
     </header>-->
     <div class="container markdown-body">
-      <h1 id="thema">第16章 Sparse Modeling and the Lasso </h1>
+      <h1 id="thema">第16章</h1>
+      <h1>Sparse Modeling and the Lasso </h1>
 
       <div class="abstract border">
         <h2 id="abs">概要</h2>
@@ -32,19 +33,19 @@
         <p>2. The Lasso</p>
         <p class="indent">Lassoの説明</p>
         <p>3. Fitting Lasso Models</p>
-        <p class="indent">Lassoモデルの解き方</p>
+        <p class="indent">Lassoモデルの性質</p>
         <p>4. Least-Angle Regression</p>
         <p class="indent">Lassoの解の求め方</p>
         <p class="indent">4.1 Lasso and Degrees of Freedom</p>
         <p>5. Fitting Generalized Lasso Models</p>
         <p class="indent">最小二乗以外の損失関数について</p>
         <p>6. Post-Selection Inference for the Lasso</p>
-        <p class="indent">Lassoモデルの解釈性</p>
-        <p>7. Connections and Extensions</p>
+        <p class="indent">Lassoの解の統計的推定について</p>
+        <!--<p>7. Connections and Extensions</p>
         <p class="indent">他の予測問題の手法との繋がり</p>
         <p class="indent">7.1 Lasso Logistic Regression and the SVM</p>
         <p class="indent">7.2 Lasso and Boosting</p>
-        <p class=indent>7.3 Extensions of the Lasso</p>
+        <p class=indent>7.3 Extensions of the Lasso</p>-->
       </div>
 
       <div class="contexts">
@@ -53,17 +54,17 @@
         <p>wide dataとは、</p>
         <p>変数の数がサンプル数をはるかに超えるデータのこと。</p>
 
-        <p>例</p>
-        <p>辞書のやつ</p>
+        <!--<p>例</p>
+        <p>辞書のやつ</p>-->
         <p>\(\Downarrow\)</p>
-        <p>数百の説明変数を回帰や分類に使うなら、全ての説明変数は使いたくない。</p>
+        <p>数百の説明変数を回帰や分類に使うとき、全ての説明変数は使いたくない。</p>
         <p>なぜなら、冗長な変数を用いると汎化性能下がる。</p>
         <p>\(\Downarrow\)</p>
-        <p>そこで良いサブセットの選択(=変数選択)の手法について興味がある。</p>
+        <p>そこで良いサブセットの選択(=変数選択)の手法について関心がある。</p>
         <p>この章では</p>
         <p>1. 変数選択(特にforward-stepwiseアプローチについて)</p>
         <p>2. Lasso</p>
-        <p>3. LARsアルゴリズム(Lassoのsolution-pathを求める)</p>
+        <p>3. LARsアルゴリズム(Lassoの解を求める手法)</p>
         <p>4. big dataとwide dataへの他のアプローチ</p>
         <p>の大きく分けて4つについて説明する。</p>
 
@@ -83,7 +84,7 @@
         <p>応答 : \(y_i(i=1,\cdots,n)\)</p>
         <p>説明変数 : \(\bf{x}_{\rm{i}}^{\rm{T}}=\rm{(x_{i1},\cdots,x_{ip})}\)</p>
         <p>(この章で扱うモデル : 線形回帰モデルorロジスティック回帰モデル)</p>
-        <p>(損失関数 : L(二乗和or対数尤度))</p>
+        <p>(損失関数 : L(二乗誤差or対数尤度))</p>
 
         <div class="border">
           <h4>アルゴリズム16.1 best subset regression</h4>
@@ -91,11 +92,12 @@
           <p class="indent">m=0から始める。</p>
           <p class="indent">\(\hat{\eta_{0}}(\bf{x}\rm{)} = \rm{\hat{\beta_{0}}}\)とする。
            ただし、\(\hat{\beta_{0}}\)は応答yの平均である。</p>
+          <p class="indent">(ここで\(\eta\)は応答\(\bf{y}\)の予測)</p>
           <p>2. ステップ2</p>
           <p class="indent">m=1では、応答yに最もfitする1つの変数\(x_j\)を求める。</p>
           <p class="indent">fit度合いは、線形回帰モデルとして\(\hat{\eta}_{1}(x_j) = \hat{\beta}_0 + x_j \hat{\beta}_j\)
             をおき、</p>
-          <p class="indent">損失関数L(\(y, \hat{\eta}_1(x_j)\))が最小となる説明変数\(x_j\)を求める。</p>
+          <p class="indent">損失L(\(y, \hat{\eta}_1(x_j)\))が最小となる説明変数\(x_j\)を求める。</p>
           <p class="indent">そして、サブセット\(A_1 = \{j\}\)とおく。 </p>
           <p>3. ステップ3</p>
           <p class="indent">各サブセットサイズ\(m\in \{2,3,\cdots,M\}\)で最適なサブセット\(A_m\)</p>
@@ -104,7 +106,8 @@
           をおき、</p>
           <p class="indent">損失関数L(\(y, \hat{\eta}_m(x_{A_m})\))が最小となる説明変数のサブセットを求める。</p>
           <p>4. ステップ4</p>
-          <p class="indent">これらのM個のサブセットから最良のサブセットを決める。</p>
+          <p class="indent">これらのM個のサブセット(\(A_1, \cdots, A_M\))から最良のサブセットを</p>
+          <p class="indent">決める。</p>
         </div>
         <p></p>
         <p>ステップ4で最適なサブセットを選択するためにいくつかの手法がある。</p>
@@ -192,16 +195,18 @@
         <h3>1.3 forward stepwise logistic regression</h3>
         <p>ここではforward stepwise ロジスティック回帰を行うと仮定する。</p>
         <!--<p>ここで更新は機能せず、全てのfit度は変数が加わるたびに最尤最尤法で計算される。</p>-->
-        <p>ステップ3で追加する変数を特定するには、</p>
-        <p>原則として(m+1)変数モデルで(p-m)回適合度を求め、</p>
-        <p>最も尤もらしい変数を見つける。</p>
-        <p>実際に適合度を測るときは、計算コストの低いスコアテストがある。</p>
+        <!--<p>ステップ3で追加する変数を特定するには、</p>
+        <p>m+1回目のステップでは、m回目のステップで選ばれたm個の説明変数と、</p>
+        <p>選ばれていない(p-m)の説明変数から1個選んでm+1個の説明変数での適合度を</p>
+        <p>求めて、(p-m)個の説明変数の中から最も尤もらしい変数を見つける。</p>
+        <p>実際に適合度を測るときは、計算コストの低いスコアテストがある。</p>-->
         <!--<p>例えば、m項でモデルをフィッティングするための反復的に</p>
         <p>重み付けされた最小二乗（IRLS）反復からの対数尤度に対する</p>
         <p>二次近似を用いることに相当する。</p>-->
         <!--<p>モデルにない変数のスコアテストは、この変数を加重最小二乗フィットに含めるテストと同じです。</p>-->
         <h4>\(\ \)例</h4>
-        <p>forward stepwise ロジスティック回帰を実際のデータで使ってみる。</p>
+        <p>forward stepwise ロジスティック回帰をspamデータで使ってみる。</p>
+        <p>アルゴリズムは上のforward stepwise 線形回帰と変わらない。</p>
         <h4>\(\ \)図16.2</h4>
         <p>横軸ステップ数(各ステップで使う変数1つ増える)、</p>
         <p>縦軸誤分類率としてspamデータに対する</p>
@@ -222,7 +227,7 @@
         <p>ただ、pが大きく理想的なactive setがかなり小さい場合は使われる。</p>-->
         <p>forward stepwise変数選択法は、図16.2に示すように</p>
         <p>一連のモデル(用いる変数の数が異なるモデル)を提供する。</p>
-        <p>1つのモデルを選択するためにCVをよく用いる。</p>
+        <p>1つのモデルを選択するためにstepwise変数選択法でもCVをよく用いる。</p>
         <p>\(\Downarrow\)</p>
         <h4>\(\ \)図16.3</h4>
         <p>spamデータとstepwise線形回帰を用いて試してみる。</p>
@@ -248,6 +253,7 @@
         <p>ここで、誤分類エラーを用いた理由は最適なモデルサイズを選ぶためである。</p>-->
         <p>よって、2乗誤差損失を小さくしても誤分類エラーについては</p>
         <p>25ステップを超えて得られる恩恵はない。</p>
+        <p>これより選択する変数の数は25とする。</p>
 
 
       </div>
@@ -258,6 +264,8 @@
         <p>1. 問題点1</p>
         <p class="indent">stepwise変数選択法はpが大きく、</p>
         <p class="indent">理想的なactive setのサイズが小さい場合には役立つ。</p>
+        <p class="indent">active set とは</p>
+        <p class="indent">変数選択で選ばれた変数のグループのこと。</p>
         <p class="indent">しかし適度な数の変数が役割を果たす場合、扱いにくくなる。</p>
         <p>2. 問題点2</p>
         <p class="indent">forward stepwise変数選択法は貪欲法である。</p>
@@ -287,7 +295,7 @@
         <p>この制約部分は、係数\(\beta\)が0になることを強いる。</p>
         <p>また、過学習を防ぐ。</p>
 
-        <p>このLasso回帰の親戚にRidge回帰というものがある。</p>
+        <p>このLassoの親戚にRidgeがいる。</p>
 
         <div class="border">
           <h4>二乗誤差損失のRidge回帰</h4>
@@ -318,9 +326,10 @@
             <figcaption>図16.4</figcaption>
           </figure>
         </div>
+        <p>\(\hat{\beta}\)は制約なしの最適解。</p>
         <p>赤線は二乗誤差損失の等高線である。</p>
         <p>青の領域は制約条件を満たす領域である。</p>
-        <p>また、Lassoでは全ての変数を同じ単位で扱うので標準化が必要である。</p>
+        <p>(また、Lassoでは全ての変数を同じ単位で扱うので標準化が必要である。)</p>
 
         <h4>\(\ \)図16.5</h4>
         <p>spamデータを用いたLasso回帰のregularization pathである。</p>
@@ -333,7 +342,7 @@
         <p>図の上の数字が制約条件のtを表す。</p>
         <p>横軸は決定係数、縦軸は係数\(\beta\)の大きさを表す。</p>
         <p>灰色の縦線は係数が非0となった瞬間を表す。</p>
-        <p>図16.1と比較してわかるように、forward stepwise法より、</p>
+        <p>図16.1と比較してわかるように、forward stepwise法より</p>
         <p>滑らかに係数が変化する。</p>
         <!--<p>16.4節で詳しく説明するが、係数\(\beta\)は制約条件のtに対して、</p>
         <p>区分線形であるので、このpathを正確にかける。</p>-->
@@ -351,8 +360,8 @@
         <p>その結果、forward stepwise法とLasso回帰はほぼ同じ性能を発揮するが、</p>
         <p>Lassoの方が多くのステップが必要である。</p>
         <!-- 縮小推定のために -->
-
-        <p>最後に、ロジスティック回帰の目的関数を下に示す。</p>
+        <br>
+        <p>最後に、ロジスティック回帰での目的関数を下に示す。</p>
 
         <div class="border">
           <h4>Lassoロジスティック回帰(or尤度ベースの線形モデル)</h4>
@@ -415,7 +424,7 @@
         <p>\(\lambda_1\)より少し小さい\(\lambda_2\)を考える。</p>
         <p>\([\lambda_2,\lambda_1]\)の範囲で、active setが変わらないなら</p>
         <p>係数\(\hat{\beta}(\lambda)\)は\([\lambda_2, \lambda_1]\)の区間で線形である。</p>
-        <p>active setをAとすると</p>
+        <p>active setをA、行列\(X_A\)をAに含まれる変数だけを用いた行列とすると、</p>
         <div align="center">
           <p>\(\bf{X}_{\rm{A}}^{\rm{T}}(\bf{y} - \bf{X}\hat{\beta}(\lambda_1)) = \rm{n}\bf{s}_A \lambda_1\)</p>
           <p>\(\bf{X}_{\rm{A}}^{\rm{T}}(\bf{y} - \bf{X}\hat{\beta}(\lambda_2)) = \rm{n}\bf{s}_A \lambda_2\)</p>
@@ -428,7 +437,7 @@
           </p>
         </div>
         <p>が得られる。</p>
-        <p>また、アクティブセットに含まれない説明変数に対応する係数\(\beta\)は0より</p>
+        <p>また、active setに含まれない説明変数に対応する係数\(\beta\)は0より</p>
         <div align="center">
           <p>\((\hat{\beta}_A (\lambda_2) - \hat{\beta}_A (\lambda_1))
             = n(\lambda_1 - \lambda_2)(\bf{X}_{\rm{A}}^{\rm{T}} X_{\rm{A}})^{-1}\bf{s}_{\rm{A}}\ \ \ \rm{(16.5)}\)
@@ -469,12 +478,15 @@
 
         <p>上の節で、Lasso回帰で得られる係数\(\beta\)が区分線形であることがわかった。</p>
         <!--<p>線形回帰の解を疎に求めるアルゴリズムとして2004年に提案されました</p>-->
-        <p>ここで、</p>
+        <p>ここで、残差を</p>
         <div align="center">
           <p>\(\bf{r}(\lambda) = \bf{y} - \bf{X}\hat{\beta}(\lambda)\)</p>
+        </div>
+        <p>残差と変数\(\bf{x}_j\)の共分散を</p>
+        <div align="center">
           <p>\(c_j(\lambda) = \frac{1}{n}|<\bf{x}_{\rm{j}}, \bf{r}(\lambda)\rm{>|}\)</p>
         </div>
-        <p>とおく。</p>
+        <p>で定義する。</p>
         <!--<p>これらも区分線形である。</p>-->
         <p>係数\(\beta\)の性質より、</p>
         <p>\(j\in A\)なら、\(c_j(\lambda)=\lambda\)</p>
@@ -492,7 +504,7 @@
             <p>\(\bf{r}_0 = \bf{y} - \bar{\bf{y}}\)</p>
             <p>\(\beta_0 =(\beta_1, \cdots, \beta_p)=\bf{0}\)</p>
           </div>
-          <p class="indent">から始める。</p>
+          <p class="indent">とする。</p>
           <p>2. ステップ2</p>
           <p class="indent">最も\(\bf{r}_0\)と相関する説明変数\(\bf{x}_{\rm{j}}\)を見つける。</p>
           <p class="indent">アクティブセットを\(A=\{j\}\)とし、</p>
@@ -531,15 +543,15 @@
               = \bf{r}_{k-1} - (\lambda_{k-1} - \lambda)\bf{X}_A \delta\)</p>
           </div>
           <p class="indent">である。</p>
-          <p>(c)</p>
+          <p>3.3 (c)</p>
           <p class="indent">\(\lambda\)を決定する。</p>
           <p class="indent">アクティブセットAに含まれない説明変数\(\bf{x}_{\rm{l}}\)に対して、</p>
           <div align="center">
             <p>\(\frac{1}{n}|<\bf{x}_{\rm{l}}, \bf{r}(\lambda)\rm{>|}=\lambda\)</p>
           </div>
           <p class="indent">を満たす\(\lambda\)の最大値を求める。(\(0<\lambda\leq \lambda_{k-1}\))</p>
-          <p>(d)</p>
-          <p class="indent">更新</p>
+          <p>3.4 (d)</p>
+          <p class="indent">更新する。</p>
           <p class="indent">アクティブセットを\(A=A\cup l\)で更新</p>
           <p class="indent">係数\(\beta\)を\(\beta^k = \beta(\lambda_k) = \beta^{k-1} +
             (\lambda_{k-1} - \lambda_{k})\Delta\)で更新</p>
@@ -552,11 +564,12 @@
         <p>forward stepwise回帰では、適合度を最も改善する変数を特定する。</p>
         <p>それからactive setに含まれる全ての変数を用いて二乗誤差損失が</p>
         <p>最小になるように係数を変更する。</p>
+        <p>\(\Downarrow\)</p>
         <p>LARアルゴリズムでは、アクティブセットAに含まれる</p>
         <p>説明変数の係数を二乗誤差損失が小さくなる方向に動かす。</p>
         <p>そして、アクティブセットAに含まれない説明変数の内積が追いつくと、</p>
         <p>その変数がアクティブセットに入れられ、またプロセスが続く。</p>
-
+        <br>
         <p>ステップ3(c)は内積の線形性のために効率的に行われる。</p>
         <!--<p>つまり、アクティブセットAに含まれない説明変数たちが</p>
         <p>いつ追いつくか正確にわかる。</p>-->
@@ -590,10 +603,11 @@
         <p>pathの終わりで、共分散は全て0になる。</p>
         <!--<p>なぜなら、pathの終わりは制約なしの最小二乗の解と同じだから。</p>-->
         <h3>\(\ \)補足</h3>
-        <p>LARアルゴリズムは厳密にはLassoのpathではない。</p>
-        <p>Lassoではactive setに含まれる変数がactive setから</p>
-        <p>drop outすることがある。</p>
+        <p>LARアルゴリズムでは厳密にLassoの解を求められない。</p>
+        <p>なぜならLassoではactive setに含まれる変数がactive setから</p>
+        <p>drop outすることがあるからだ。</p>
         <p>これは係数の大きさが非0から0になる時に起こる。</p>
+        <p>(変数が強く相関している時に起こりやすい。)</p>
         <!--<p>劣勾配方程式(16.4)はactive setの変数に対応する係数の符号が</p>
         <p>勾配の符号と一致することを示す。</p>-->
         <p>\(\Downarrow\)</p>
@@ -602,10 +616,10 @@
         <p>非0の係数は次の説明変数がactive setに入る前に0を交差する場合、</p>
         <p>active set Aからその説明変数をdropする。</p>
         <p>そして、縮小されたactive setを使用して最小二乗方向\(\Delta\)を計算する。</p>
-        <p>\(\Downarrow\)</p>
-        <p>これは変数が強く相関している時に起こりやすい。</p>
 
         <h3 id="subsection41">4.1 Lasso and Degrees of Freedom</h3>
+        <p>自由度とは、</p>
+        <p>(ある変数において)自由に値を取れるデータの数のこと。</p>
         <h4>図16.8</h4>
         <div align="center">
           <figure id="fig8">
@@ -615,7 +629,7 @@
         </div>
         <p>図16.8の左の図を見ると、forward stepwise回帰はLasso回帰より</p>
         <p>早くMSEを小さくする。</p>
-        <p>12章のdfの共分散式を用いて、各ステップでfitting度合いを測る。</p>
+        <p>12章のdfを用いて、各ステップでの適合度合いを測る。</p>
         <p>ここでdfはdegree of freedom、自由度のことであり</p>
         <div align="center">
           <p>\(df = \frac{1}{\sigma^2}\sum_{i=1}^n cov(y_i , \hat{y}_i )\ \ \ \ (16.6)\)</p>
@@ -623,8 +637,6 @@
         <p>で定義される。</p>
         <p>右の図ではspamデータでforward stepwise回帰とLassoのdfを推定した</p>
         <p>シミュレーション結果を示す。</p>
-
-
 
         <p>図16.8の右図の茶色のプロットからわかるように、</p>
         <p>LARアルゴリズムでは各ステップで１つdfが増える。</p>
@@ -646,7 +658,7 @@
         <p>forward stepwise変数選択法では探索でより多くのdfを費やす。</p>
         <p>Lassoは次の変数を探索するが、次の変数が入るまでは、</p>
         <p>完全に新しいモデルにはならない</p>
-        <p>新しい変数が含まれると、1つ新しいdfが使われる。</p>
+        <p>新しい変数が含まれると、1つ新しいdfを費やす。</p>
 
       </div>
 
@@ -654,7 +666,7 @@
         <h2 id="section5">5. Fitting Generalized Lasso Models</h2>
         <p>今までは、二乗誤差損失のLassoにだけ焦点を当て、</p>
         <p>係数の区分線形性を効率的な係数の推定に利用してきた。</p>
-        <p>しかし、二乗誤差損失以外の損失関数ではこの区分線型性は生じない。</p>
+        <p>しかし、二乗誤差損失以外の損失関数ではこの区分線形性は生じない。</p>
         <p>よって潜在的に係数\(\beta\)の推定にコストがかかる。</p>
         <h4>\(\ \)例</h4>
         <p>ロジスティック回帰による2値分類問題を考える。</p>
@@ -680,7 +692,7 @@
         <p>\(\hat{\beta}_j \not= 0\)なら、\(s_j = \pm 1\)で、</p>
         <p>\(\hat{\beta}_j = 0\)なら、\(s_j \in [-1,1]\)である。</p>
         <p>また\(\mu^{T} = (\mu_1, \cdots, \mu_n)\)である。</p>
-        <p>しかし、\(\mu_i\)の非線形性が係数\(\beta\)の性質として区分非線型性をもたらす。</p>
+        <p>しかし、\(\mu_i\)の非線形性が係数\(\beta\)の性質として区分非線形性をもたらす。</p>
         <p>そこで、係数\(\beta\)を推定するために、\(\lambda\)に対する十分細かいグリッドを用意する。</p>
 
         <p>まず、\(\lambda\)の最大値を求める。</p>
@@ -703,17 +715,20 @@
           <p>2.</p>
           <p class="indent">\(\lambda_1\)から始める。ここでは全ての係数\(\beta\)が0である。</p>
           <p class="indent">\(\lambda_1,\cdots,\lambda_{100}\)に対する\(\beta\)の計算にwarm startsを用いる。</p>
-          <p class="indent">warm startsは一連の\(\hat{\beta}(\lambda_k)\)に対して素晴らしい初期設定を与える。</p>
+          <p class="indent">warm startsとは</p>
+          <p class="indent">最適化問題を解く際に類似した問題の解を初期解として</p>
+          <p class="indent">解くことによって高速化を図る手法のこと。</p>
           <p>3.</p>
           <p class="indent">active setは\(\lambda\)が減るにつれてゆっくり変わる。</p>
           <p class="indent">active setを推測する計算上のhedges(制限?)は、</p>
           <p class="indent">特に効率的であることが証明されている。</p>
           <p class="indent">推測が正しいなら、収束するまで、active setの変数で</p>
-          <p class="indent">座標降下を繰り返す。</p>
+          <p class="indent">coordinate descentを繰り返す。</p>
           <!--<p class="indent">全ての変数の一掃は直感を確認する。</p>-->
         </div>
 
-        <p>Rのパッケージglmnetではproximal-Newton法を各\(\lambda_k\)用いる。</p>
+        <p>このpath-wise coordinate descentをproximal-Newton法で用いて、</p>
+        <p>各\(\lambda_k\)に対する\(\hat{\beta}(\lambda_k)\)を求める。</p>
         <div class="border">
           <h4>proximal-Newton法</h4>
           <p>1. ステップ1</p>
@@ -721,11 +736,12 @@
           <p class="indent">対数尤度Lに対する重み付最小二乗(2次)近似を計算する。</p>
           <!--<p class="indent">これは通常のGLMのように動作応答と観測重みを生成する。</p>-->
           <p>2. ステップ2</p>
-          <p class="indent">\(\lambda_k\)での重み付き最小二乗Lassoを座標降下で解く。</p>
-          <p class="indent">そこで、warm startsとactive setの繰り返しを用いる。</p>
+          <p class="indent">\(\lambda_k\)での重み付き最小二乗Lassoをcoordinate descentで解く。</p>
+          <p class="indent">そこで、warm startsとactive set反復を用いる。</p>
         </div>
 
         <p>以下に詳細を与える。</p>
+        <p>各\(\lambda_k\)に対して、\(\hat{\beta}(\lambda_k)\)を求める。</p>
         <!--<p>ここで、なぜこれらの手法が効率的か説明する。</p>-->
 
         <p>重み付き最小二乗問題</p>
@@ -745,7 +761,7 @@
             \frac{1}{2n}\sum_{i=1}^{n} w_i(r_i - x_{ij}\beta_{j})^2 +
              \lambda ||\beta_j||_1\ \ \ \ (16.12)\)</p>
         </div>
-        <p>この劣勾配方程式は</p>
+        <p>この劣勾配条件は</p>
         <div align="center">
           <p>\(\frac{1}{n}\sum_{i=1}^{n} w_i x_{ij}(r_i - x_{ij}\beta_{j}) -
              \lambda \rm{sign}(\beta_j) = 0\ \ \ \ (16.13)\)</p>
@@ -766,8 +782,9 @@
           <p>2. ステップ2</p>
           <p class="indent">\(\hat{\beta}_j\)を生成するソフト閾値\(\tilde{\beta}_{j}\)について</p>
           <div align="center">
-            <p>\(\hat{\beta}_{j} = 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (|\tilde{\beta}_j |<\lambda)
-              \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \)</p>
+            <p>\(\hat{\beta}_{j} = 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+              (|\tilde{\beta}_j |<\lambda)
+              \ \ \ \ \ \)</p>
             <p>\(\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
               = \rm{sign}(\tilde{\beta}_j)(|\tilde{\beta}_j| - \lambda)\ \ \ (othewise)  \ \ \ \ (16.15)\)</p>
           </div>
@@ -778,18 +795,18 @@
         <!--<p>各勾配降下更新は、本質的に内積と、ソフト閾値処理が必要である。</p>
         <p>これは、\(x_{ij}\)が疎行列形式で保存される場合に特に役立つ。</p>
         <p>なぜなら、内積は非0の時だけ計算が行われる。</p>-->
-        <p>ステップ前(\(\lambda_{k-1}\))に係数がの値が0のものがステップ後(\(\lambda_k\))も0のままなら、</p>
+        <p>ステップ前(\(\lambda_{k-1}\))に係数の値が0のものがステップ後(\(\lambda_k\))も0のままなら、</p>
         <p>係数がただ動く。そうでなければモデルは更新される。</p>
         <p>また、\(\lambda_k\)での係数\(\beta\)に対して、</p>
         <div align="center">
           <p>\(|<\bf{x}_{\rm{j}}, \bf{r}>_{\bf{w}}\rm{| = \lambda_k}\)</p>
         </div>
         <p>が成り立っている(\(j \in A\))。</p>
-        <p>そして、\(\lambda_{k+1}(< \lambda_k)\)において</p>
+        <p>そして、同じ\(\beta\)を用いて\(\lambda_{k+1}(< \lambda_k)\)で</p>
         <div align="center">
-          <p>\(|<\bf{x}_{\rm{j}}, \bf{r}>_{\bf{w}}\rm{| \geq \lambda_{k+1}}\)</p>
+          <p>\(|<\bf{x}_{\rm{l}}, \bf{r}>_{\bf{w}}\rm{| \geq \lambda_{k+1}}\)</p>
         </div>
-        <p>が成り立つ\(\bf{x}_{\rm{j}}\)が\(\lambda=\lambda_{k+1}\)でactive setに含まれる候補となる。</p>
+        <p>が成り立つ\(\bf{x}_{\rm{l}}\)が\(\lambda=\lambda_{k+1}\)でactive setに含まれる候補となる。</p>
 
         <h4>\(\ \)elastic net</h4>
         <p>LassoとRidgeの中間的なやつ。</p>
@@ -827,10 +844,13 @@
 
       </div>
 
-      <div class="contexts">
+      <div class="contexts bottom">
         <h2 id="section6">6. Post-Selection Inference for the Lasso</h2>
-        <p>この節では、</p>
-        <p>推論には注意を向けず、解釈可能なモデルの構築について説明する。</p>
+        <p>この章では、推定にはほとんど注意を向けず、</p>
+        <p>解釈可能なモデルの構築について説明してきた。</p>
+        <p>推定とは、</p>
+        <p>標本から得られた統計量をもとにして，</p>
+        <p>母数の存在する範囲を求める手法のこと。</p>
         <!--<p>確かに推論は適応的に選択されたモデルにとっては困難である。</p>-->
         <p>\(\Downarrow\)</p>
         <p>ある\(\lambda\)でLasso回帰モデルをfitしたと仮定する。</p>
@@ -847,20 +867,26 @@
         <p>\(\Downarrow\)</p>
         <p>生じる疑問の1つのは</p>
         <p>1. p個全ての説明変数の集合を使用した</p>
-        <p>\(\ \ \ \ \)集団回帰パラメータの推論に関心があるのか、</p>
-        <p>2. サブセットAの説明変数の集合を使用した</p>
-        <p>\(\ \ \ \ \)集団回帰パラメータの推論に関心があるのかである。</p>
+        <p>\(\ \ \ \ \)集団回帰パラメータの推定に関心があるのか、</p>
+        <p>2. active set Aの説明変数の集合を使用した</p>
+        <p>\(\ \ \ \ \)集団回帰パラメータの推定に関心があるのかである。</p>
         <div class="border">
           <h4>1つ目のケース</h4>
-          <p class="indent">選択されたモデルの係数を完全な母集団係数ベクトルの効率的だが偏った推定値として</p>
-          <p class="indent">見ることができると提案されている。</p>
-          <p class="indent">もちろん、最初に選択されたより強力な変数については、よりシャープな推論が利用可能になります。</p>
+          <p class="indent">選択されたモデルの係数を完全な母集団係数ベクトルの効率的だが</p>
+          <p class="indent">偏った推定値として見ることができると提案されている。</p>
+          <p class="indent">もちろん、最初に選択されたより強力な変数については、</p>
+          <p class="indent">よりシャープな推論が可能になります。</p>
           <h4>２つ目のケース</h4>
-          <p>アイディアとしては変数選択とactive set自体を条件づけることだ。</p>
-          <p>Aの変数のみの応答の制約なし(すなわち、lassoで収縮していない）回帰係数に対して条件付き推論を実行することである。</p>
-          <p>二乗誤差損失のLassoの場合、active set内の変数を導く応答\(\bf{y}\)が凸超多面体を形成することがわかる。</p>
-          <p>(もし係数の符号についても条件づけるなら、符号を無視することは超多面体の有限結合を導く。)</p>
-          <p>これは、細かいガウス条件付けの議論とともに、関心のあるパラメータのためのガウス分布およびt-分布を切り捨てることにつながります。</p>
+          <p class="indent">アイディアとしては変数選択とactive set A自体を条件づけることだ。</p>
+          <p class="indent">Aの変数のみの応答の制約なし(すなわち、lassoで収縮していない）</p>
+          <p class="indent">回帰係数に対して条件付き推論を実行することである。</p>
+          <p class="indent">二乗誤差損失のLassoの場合、active set内の変数を導く応答\(\bf{y}\)が</p>
+          <p class="indent">凸超多面体を形成することがわかる。</p>
+          <p class="indent">(もし係数の符号についても条件づけるなら、</p>
+          <p class="indent">符号を無視することは超多面体の有限結合を導く。)</p>
+          <p class="indent">これは、細かいガウス条件付けの議論とともに、</p>
+          <p class="indent">関心のあるパラメータのためのガウス分布およびt-分布を</p>
+          <p class="indent">切り捨てることにつながります。</p>
         </div>
 
         <h4>図16.10</h4>
@@ -881,7 +907,7 @@
 
       </div>
 
-      <div class="contexts bottom">
+      <!--<div class="contexts bottom">
         <h2 id="section7">7. Connections and Extensions</h2>
         <p>Lassoモデルと他の有名な予測問題の手法との繋がりについて。</p>
 
@@ -902,15 +928,27 @@
         <p>3. 判別分析、正準相関分析</p>
         <p>4. 核ノルム</p>
 
-      </div>
+      </div>-->
 
     </div>
 
     <div class="container markdown-left">
-      <p>線形回帰モデル</p>
-      <p class="small">\(y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} \)</p>
-      <p>サンプル : \(i=1,\cdots,n\)</p>
-      <p>説明変数 : \(x_{i1},\cdots,x_{ip}\)</p>
+      <p>仮定</p>
+      <p>\(\ \)サンプル : \(i = 1,\cdots,n\)</p>
+      <p>\(\ \)応答 : \(y_i\)</p>
+      <p>\(\ \)説明変数 : \(x_{i1},\cdots,x_{ip}\)</p>
+      <p>1. 線形回帰モデル</p>
+      <p class="small">\(\ y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} \)</p>
+      <p>\(\ \)2乗誤差損失</p>
+      <p class="small2">\(\ \sum_i^n (y_i - \beta_0 - \beta_1 x_{i1} - \cdots - \beta_p x_{ip})^2\)</p>
+      <br>
+      <p>2. ロジスティック回帰モデル</p>
+      <p class="small">\(\ \ \)y_i = 1\(\ \ (\mu_i > 0.5)\)</p>
+      <p class="small">\(\ \ \ \ \ \ \)  = 0\(\ \ (\mu_i \leq 0.5)\)</p>
+      <p class="small">\(\ \ \mu_i = \frac{\exp(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_{p}x_{ip})}
+        {1 + \exp(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_{p}x_{ip})}\)</p>
+      <p>\(\ \)対数尤度損失</p>
+      <p class="small2">\(\ \sum_{i=1}^{n} y_i \log \mu_i + (1-y_i)\log (1-\mu_i)\)</p>
     </div>
     <script type="text/javascript" src=“main.js”></script>
   </body>
